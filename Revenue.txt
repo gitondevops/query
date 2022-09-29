@@ -1,0 +1,15 @@
+SELECT 
+    DATE(c.entry_date) AS entry_date,
+    c.lab_name,
+    im.machine_name,
+    im.department,
+    c.test_name,
+    SUM(c.test_count) AS qty,
+    im.invest_rate AS rate,
+    im.invest_rate * (SUM(c.test_count)) AS revenue_amount
+FROM sharp_cms.cms_revenue c
+        JOIN  sharp_cms.investigation_master im ON c.im_id = im.im_id
+WHERE
+    DATE(c.entry_date) BETWEEN '2021-08-17' AND '2021-09-23'
+GROUP BY DATE(c.entry_date) , c.im_id , c.lab_id
+ORDER BY MONTHNAME(c.entry_date) , c.lab_id;
